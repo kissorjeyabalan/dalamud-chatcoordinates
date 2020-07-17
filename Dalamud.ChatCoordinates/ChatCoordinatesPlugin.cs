@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using Dalamud.Game.Chat;
+using Dalamud.Game.Chat.SeStringHandling;
 using Dalamud.Game.Chat.SeStringHandling.Payloads;
 using Dalamud.Game.Command;
 using Dalamud.Game.Internal.Gui;
@@ -80,6 +82,30 @@ namespace ChatCoordinates
             var territorySheet = _pi.Data.GetExcelSheet<TerritoryType>().GetRow(_pi.ClientState.TerritoryType);
             var mapLink = new MapLinkPayload(unsignedTerritoryType, territorySheet.Map, x, y);
             _pi.Framework.Gui.OpenMapWithMapLink(mapLink);
+            
+            var nameString = $"{mapLink.PlaceName} {mapLink.CoordinateString}";
+            var payloads = new List<Payload>(new Payload[]
+            {
+                mapLink,
+                new TextPayload(nameString),
+                RawPayload.LinkTerminator,
+            });
+
+            var textArrowPayload = new List<Payload>(new Payload[]
+            {
+                new UIForegroundPayload(0x01F4),
+                new UIGlowPayload(0x01F5),
+                new TextPayload($"{(char)SeIconChar.LinkMarker}"),
+                UIGlowPayload.UIGlowOff,
+                UIForegroundPayload.UIForegroundOff, 
+            });
+            payloads.InsertRange(1, textArrowPayload);
+            var squareEnixString = new SeString(payloads);
+            
+            _pi.Framework.Gui.Chat.PrintChat(new XivChatEntry
+            {
+                MessageBytes = squareEnixString.Encode()
+            });
         }
 
         private void ShowHelp(string command)
@@ -89,7 +115,7 @@ namespace ChatCoordinates
                 $"{command} help - Show this message \n" +
                 $"{command} 8.8,11.5\n" +
                 $"{command} (x8.8,y11.5)\n" +
-                $"{command} 8.8 11.5\n";
+                $"{command} 8.8 11.5";
             _pi.Framework.Gui.Chat.Print(helpText);
         }
         

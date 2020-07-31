@@ -169,7 +169,7 @@ namespace ChatCoordinates
                 $"{command} 8.8,11.5\n" +
                 $"{command} (x8.8,y11.5)\n" +
                 $"{command} 8.8 11.5\n" + 
-                $"{command} 8.8,11.5 : Mist" +
+                $"{command} 8.8,11.5 : Mist\n" +
                 $"{command} 8.8 11.5 : Mist";
             _pi.Framework.Gui.Chat.Print(helpText);
         }

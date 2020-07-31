@@ -13,6 +13,8 @@
         <e p="Properties" t="Include">
           <e p="AssemblyInfo.cs" t="Include" />
         </e>
+        <e p="TerritoryDetail.cs" t="Include" />
+        <e p="TerritoryManager.cs" t="Include" />
       </e>
       <e p="Dalamud.ChatCoordinates.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />

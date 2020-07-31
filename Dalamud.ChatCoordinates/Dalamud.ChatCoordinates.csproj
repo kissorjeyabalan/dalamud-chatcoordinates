@@ -52,6 +52,8 @@
     <ItemGroup>
       <Compile Include="ChatCoordinatesPlugin.cs" />
       <Compile Include="Properties\AssemblyInfo.cs" />
+      <Compile Include="TerritoryDetail.cs" />
+      <Compile Include="TerritoryManager.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="ChatCoordinates.json">

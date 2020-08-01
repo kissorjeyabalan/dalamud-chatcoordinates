@@ -58,7 +58,11 @@ namespace ChatCoordinates
         public void PrintTerritory(string command, string args)
         {
             _territoryManager.Value.GetTerritoryDetails();
-            
+            if (_pi.ClientState.TerritoryType == 0)
+            {
+                _pi.Framework.Gui.Chat.Print("Unable to get territory info, please switch your territory to initialize.");
+                return;
+            }
             var unsignedTerritoryType = Convert.ToUInt32(_pi.ClientState.TerritoryType);
             var territorySheet = _pi.Data.GetExcelSheet<TerritoryType>().GetRow(_pi.ClientState.TerritoryType);
             var map = _pi.Data.GetExcelSheet<Map>().GetRow(territorySheet.Map.Value.RowId);
@@ -121,7 +125,11 @@ namespace ChatCoordinates
                 ShowHelp(command);
                 return;
             }
-
+            if (_pi.ClientState.TerritoryType == 0)
+            {
+                _pi.Framework.Gui.Chat.Print("Unable to get territory info, please switch your territory to initialize.");
+                return;
+            }
             var unsignedTerritoryType = Convert.ToUInt32(_pi.ClientState.TerritoryType);
             var territorySheet = _pi.Data.GetExcelSheet<TerritoryType>().GetRow(_pi.ClientState.TerritoryType);
             OpenMapWithFlag(unsignedTerritoryType, territorySheet.Map.Value.RowId, territorySheet.Map.Value.SizeFactor, coordinates.Item1, coordinates.Item2);
@@ -169,7 +177,7 @@ namespace ChatCoordinates
                 $"{command} 8.8,11.5\n" +
                 $"{command} (x8.8,y11.5)\n" +
                 $"{command} 8.8 11.5\n" + 
-                $"{command} 8.8,11.5 : Mist" +
+                $"{command} 8.8,11.5 : Mist\n" +
                 $"{command} 8.8 11.5 : Mist";
             _pi.Framework.Gui.Chat.Print(helpText);
         }

@@ -19,7 +19,6 @@ namespace ChatCoordinates
 
         public TerritoryDetail GetTerritoryDetailsByPlaceName(string placeName, bool matchPartial = true)
         {
-            _pi.Framework.Gui.Chat.Print("Looking up details for " + placeName);
             var territoryDetail = _territoryDetails.FirstOrDefault(x =>
                 x.PlaceName.Equals(placeName, StringComparison.OrdinalIgnoreCase) ||
                 matchPartial && x.PlaceName.ToUpper().Contains(placeName.ToUpper()));

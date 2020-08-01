@@ -46,11 +46,6 @@ namespace ChatCoordinates
             {
                 HelpMessage = "Shows current territory ushort"
             });
-
-            _pi.ClientState.TerritoryChanged += (sender, e) =>
-            {
-                _pi.Framework.Gui.Chat.Print($"Territory: {e}");
-            };
 #endif
 
         }
@@ -101,7 +96,7 @@ namespace ChatCoordinates
             var territoryDetails = _territoryManager.Value.GetTerritoryDetailsByPlaceName(zone.Trim());
             if (territoryDetails == null)
             {
-                _pi.Framework.Gui.Chat.Print("No match found for location.");
+                _pi.Framework.Gui.Chat.Print($"No match found for {zone.Trim()}.");
                 return;
             }
             
@@ -110,7 +105,6 @@ namespace ChatCoordinates
             {
                 MessageBytes = _pi.SeStringManager.CreateMapLink(territoryDetails.PlaceName, coordinates.Item1, coordinates.Item2).Encode()
             });
-
         }
 
         private void PlaceCoordinate(string command, string arg)
@@ -165,12 +159,13 @@ namespace ChatCoordinates
         {
             var helpText =
                 $"{Name} Help:\n" +
-                $"{command} help - Show this message \n" +
+                $"First set of numbers are treated as coordinates. Any combination of letters or symbols (except colon) acts as delimiter for X and Y. Accepts optional colon (:) as delimiter for zone.\n" +
+                $"Placed marker can be shared by typing <flag>\n" +
                 $"{command} 8.8,11.5\n" +
                 $"{command} (x8.8,y11.5)\n" +
                 $"{command} 8.8 11.5\n" + 
-                $"{command} 8.8,11.5 : Mist" +
-                $"{command} 8.8 11.5 : Mist";
+                $"{command} X 8.8 Y 11.5 : Mist\n" +
+                $"{command} 10.7,11.7 : Lakeland";
             _pi.Framework.Gui.Chat.Print(helpText);
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
@@ -144,7 +145,7 @@ namespace ChatCoordinates
             foreach (Match coordinate in coordinates)
             {
                 if (string.IsNullOrWhiteSpace(coordinate.Value)) continue;
-                if (!float.TryParse(coordinate.Value, out var coord)) continue;
+                if (!float.TryParse(coordinate.Value, NumberStyles.Float, CultureInfo.InvariantCulture,  out var coord)) continue;
                 if (!xSet)
                 {
                     x = coord;

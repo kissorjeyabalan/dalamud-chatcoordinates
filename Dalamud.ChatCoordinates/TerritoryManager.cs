@@ -27,29 +27,17 @@ namespace ChatCoordinates
 
         public IEnumerable<TerritoryDetail> GetTerritoryDetails()
         {
-            var territoryDetails = new List<TerritoryDetail>();
-            foreach (var territoryType in _pi.Data.GetExcelSheet<TerritoryType>())
-            {
-                var type = territoryType.Bg.Split('/');
-                if (type.Length >= 3)
+            return (from territoryType in _pi.Data.GetExcelSheet<TerritoryType>()
+                let type = territoryType.Bg.RawString.Split('/')
+                where type.Length >= 3
+                where type[2] == "twn" || type[2] == "fld" || type[2] == "hou"
+                where !string.IsNullOrWhiteSpace(territoryType.Map.Value.PlaceName.Value.Name)
+                select new TerritoryDetail
                 {
-                    if (type[2] == "twn" || type[2] == "fld" || type[2] == "hou")
-                    {
-                        if (!string.IsNullOrWhiteSpace(territoryType.Map.Value.PlaceName.Value.Name))
-                        {
-                            territoryDetails.Add(new TerritoryDetail
-                            {
-                                TerritoryType = territoryType.RowId, 
-                                MapId = territoryType.Map.Value.RowId,
-                                MapSizeFactor = territoryType.Map.Value.SizeFactor,
-                                PlaceName = territoryType.Map.Value.PlaceName.Value.Name,
-                            });   
-                        }
-                    }
-                }
-            }
-
-            return territoryDetails;
+                    TerritoryType = territoryType.RowId, MapId = territoryType.Map.Value.RowId,
+                    MapSizeFactor = territoryType.Map.Value.SizeFactor,
+                    PlaceName = territoryType.Map.Value.PlaceName.Value.Name,
+                }).ToList();
         }
     }
 }

@@ -31,14 +31,14 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="Dalamud, Version=5.0.0.2, Culture=neutral, PublicKeyToken=null">
+        <Reference Include="Dalamud, Version=5.2.0.3, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\..\..\AppData\Roaming\XIVLauncher\addon\Hooks\Dalamud.dll</HintPath>
         </Reference>
-        <Reference Include="Lumina, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <Reference Include="Lumina, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\..\..\AppData\Roaming\XIVLauncher\addon\Hooks\Lumina.dll</HintPath>
         </Reference>
-        <Reference Include="Lumina.Generated, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\..\..\AppData\Roaming\XIVLauncher\addon\Hooks\Lumina.Generated.dll</HintPath>
+        <Reference Include="Lumina.Excel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\..\..\..\AppData\Roaming\XIVLauncher\addon\Hooks\Lumina.Excel.dll</HintPath>
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />

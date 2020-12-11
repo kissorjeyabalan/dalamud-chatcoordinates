@@ -17,15 +17,15 @@ namespace ChatCoordinates
     {
         public string Name => "ChatCoordinates Plugin";
         private DalamudPluginInterface _pi;
-        
+
         private Lazy<TerritoryManager> _territoryManager;
-        
+
         private GetUIObjectDelegate getUIObject;
         private GetUIMapObjectDelegate getUIMapObject;
         private OpenMapWithFlagDelegate openMapWithFlag;
 
         public ChatCoordinatesPlugin()
-        { 
+        {
             _territoryManager = new Lazy<TerritoryManager>(() => new TerritoryManager(_pi));
         }
 
@@ -35,7 +35,8 @@ namespace ChatCoordinates
 
             var targetModule = Process.GetCurrentProcess().MainModule;
             var sig = new SigScanner(targetModule, true);
-            getUIObject = Marshal.GetDelegateForFunctionPointer<GetUIObjectDelegate>(sig.ScanText("E8 ?? ?? ?? ?? 48 8B C8 48 8B 10 FF 52 40 80 88 ?? ?? ?? ?? 01 E9"));
+            getUIObject = Marshal.GetDelegateForFunctionPointer<GetUIObjectDelegate>(
+                sig.ScanText("E8 ?? ?? ?? ?? 48 8B C8 48 8B 10 FF 52 40 80 88 ?? ?? ?? ?? 01 E9"));
 
             _pi.CommandManager.AddHandler("/coord", new CommandInfo(CommandHandler)
             {
@@ -48,7 +49,6 @@ namespace ChatCoordinates
                 HelpMessage = "Shows current territory ushort"
             });
 #endif
-
         }
 
         public void PrintTerritory(string command, string args)
@@ -56,9 +56,11 @@ namespace ChatCoordinates
             _territoryManager.Value.GetTerritoryDetails();
             if (_pi.ClientState.TerritoryType == 0)
             {
-                _pi.Framework.Gui.Chat.Print("Unable to get territory info, please switch your territory to initialize.");
+                _pi.Framework.Gui.Chat.Print(
+                    "Unable to get territory info, please switch your territory to initialize.");
                 return;
             }
+
             var unsignedTerritoryType = Convert.ToUInt32(_pi.ClientState.TerritoryType);
             var territorySheet = _pi.Data.GetExcelSheet<TerritoryType>().GetRow(_pi.ClientState.TerritoryType);
             var map = _pi.Data.GetExcelSheet<Map>().GetRow(territorySheet.Map.Value.RowId);
@@ -101,14 +103,22 @@ namespace ChatCoordinates
             var territoryDetails = _territoryManager.Value.GetTerritoryDetailsByPlaceName(zone.Trim());
             if (territoryDetails == null)
             {
-                _pi.Framework.Gui.Chat.Print($"No match found for {zone.Trim()}.");
+                if (arg.Count(x => x == ':') == 1)
+                {
+                    _pi.Framework.Gui.Chat.Print($"No match found for {zone.Trim()}.");
+                    return;   
+                }
+                
+                PlaceCoordinate(command, arg);
                 return;
             }
-            
-            OpenMapWithFlag(territoryDetails.TerritoryType, territoryDetails.MapId, territoryDetails.MapSizeFactor, coordinates.Item1, coordinates.Item2);
+
+            OpenMapWithFlag(territoryDetails.TerritoryType, territoryDetails.MapId, territoryDetails.MapSizeFactor,
+                coordinates.Item1, coordinates.Item2);
             _pi.Framework.Gui.Chat.PrintChat(new XivChatEntry
             {
-                MessageBytes = _pi.SeStringManager.CreateMapLink(territoryDetails.PlaceName, coordinates.Item1, coordinates.Item2).Encode()
+                MessageBytes = _pi.SeStringManager
+                    .CreateMapLink(territoryDetails.PlaceName, coordinates.Item1, coordinates.Item2).Encode()
             });
         }
 
@@ -120,23 +130,27 @@ namespace ChatCoordinates
                 ShowHelp(command);
                 return;
             }
+
             if (_pi.ClientState.TerritoryType == 0)
             {
-                _pi.Framework.Gui.Chat.Print("Unable to get territory info, please switch your territory to initialize.");
+                _pi.Framework.Gui.Chat.Print(
+                    "Unable to get territory info, please switch your territory to initialize.");
                 return;
             }
+
             var unsignedTerritoryType = Convert.ToUInt32(_pi.ClientState.TerritoryType);
             var territorySheet = _pi.Data.GetExcelSheet<TerritoryType>().GetRow(_pi.ClientState.TerritoryType);
-            OpenMapWithFlag(unsignedTerritoryType, territorySheet.Map.Value.RowId, territorySheet.Map.Value.SizeFactor, coordinates.Item1, coordinates.Item2);
+            OpenMapWithFlag(unsignedTerritoryType, territorySheet.Map.Value.RowId, territorySheet.Map.Value.SizeFactor,
+                coordinates.Item1, coordinates.Item2);
             _pi.Framework.Gui.Chat.PrintChat(new XivChatEntry
             {
-                MessageBytes = _pi.SeStringManager.CreateMapLink(territorySheet.Map.Value.PlaceName.Value.Name, coordinates.Item1, coordinates.Item2).Encode()
+                MessageBytes = _pi.SeStringManager.CreateMapLink(territorySheet.Map.Value.PlaceName.Value.Name,
+                    coordinates.Item1, coordinates.Item2).Encode()
             });
         }
 
         private Tuple<float, float> GetRawXAndRawYByInput(string coordinateString)
         {
-            
             var coordinates = Regex.Matches(coordinateString, "(\\d*\\.?\\d*)");
             var xSet = false;
             var ySet = false;
@@ -145,7 +159,8 @@ namespace ChatCoordinates
             foreach (Match coordinate in coordinates)
             {
                 if (string.IsNullOrWhiteSpace(coordinate.Value)) continue;
-                if (!float.TryParse(coordinate.Value, NumberStyles.Float, CultureInfo.InvariantCulture,  out var coord)) continue;
+                if (!float.TryParse(coordinate.Value, NumberStyles.Float, CultureInfo.InvariantCulture,
+                    out var coord)) continue;
                 if (!xSet)
                 {
                     x = coord;
@@ -160,7 +175,7 @@ namespace ChatCoordinates
 
             if (!xSet || !ySet)
                 return null;
-            
+
             return new Tuple<float, float>(x, y);
         }
 
@@ -172,7 +187,7 @@ namespace ChatCoordinates
                 $"Placed marker can be shared by typing <flag>\n" +
                 $"{command} 8.8,11.5\n" +
                 $"{command} (x8.8,y11.5)\n" +
-                $"{command} 8.8 11.5\n" + 
+                $"{command} 8.8 11.5\n" +
                 $"{command} X 8.8 Y 11.5 : Mist\n" +
                 $"{command} 10.7,11.7 : Lakeland";
             _pi.Framework.Gui.Chat.Print(helpText);
@@ -181,11 +196,15 @@ namespace ChatCoordinates
         public void Dispose()
         {
             _pi.CommandManager.RemoveHandler("/coords");
+
+#if DEBUG
             _pi.CommandManager.RemoveHandler("/territory");
+#endif
             _pi.Dispose();
         }
-        
-        private void OpenMapWithFlag(uint territoryType, uint mapId, ushort sizeFactor, float niceX, float niceY, float fudge = 0.05f)
+
+        private void OpenMapWithFlag(uint territoryType, uint mapId, ushort sizeFactor, float niceX, float niceY,
+            float fudge = 0.05f)
         {
             var rawX = ConvertMapCoordinateToRawPosition(niceX + fudge, sizeFactor);
             var rawY = ConvertMapCoordinateToRawPosition(niceY + fudge, sizeFactor);
@@ -204,11 +223,13 @@ namespace ChatCoordinates
             float num = scale / 100f;
             return (int) ((float) ((pos - 1.0) * num / 41.0 * 2048.0 - 1024.0) / num * 1000f);
         }
-        
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate IntPtr GetUIObjectDelegate();
+
         [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
         private delegate IntPtr GetUIMapObjectDelegate(IntPtr UIObject);
+
         [UnmanagedFunctionPointer(CallingConvention.ThisCall, CharSet = CharSet.Ansi)]
         private delegate bool OpenMapWithFlagDelegate(IntPtr UIMapObject, string flag);
     }

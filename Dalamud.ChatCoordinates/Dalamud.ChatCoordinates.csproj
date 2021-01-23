@@ -31,7 +31,7 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="Dalamud, Version=5.2.0.3, Culture=neutral, PublicKeyToken=null">
+        <Reference Include="Dalamud, Version=5.2.2.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\..\..\..\AppData\Roaming\XIVLauncher\addon\Hooks\Dalamud.dll</HintPath>
         </Reference>
         <Reference Include="Lumina, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null">
@@ -51,9 +51,12 @@
     </ItemGroup>
     <ItemGroup>
       <Compile Include="ChatCoordinatesPlugin.cs" />
+      <Compile Include="CoordinateHelper.cs" />
+      <Compile Include="Managers\AetheryteManager.cs" />
+      <Compile Include="Managers\TerritoryManager.cs" />
+      <Compile Include="Models\AetheryteDetail.cs" />
+      <Compile Include="Models\TerritoryDetail.cs" />
       <Compile Include="Properties\AssemblyInfo.cs" />
-      <Compile Include="TerritoryDetail.cs" />
-      <Compile Include="TerritoryManager.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="ChatCoordinates.json">

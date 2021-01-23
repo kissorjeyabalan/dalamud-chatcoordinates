@@ -1,4 +1,4 @@
-﻿namespace ChatCoordinates
+﻿namespace ChatCoordinates.Models
 {
     public class TerritoryDetail
     {

@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\kij\.Rider2019.3\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\kij\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_Dalamud.ChatCoordinates.1741214380.00" t="ExcludeRecursive" />
+    <e p="C:\Users\kij\AppData\local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\kij\AppData\local\JetBrains\Rider2020.3\resharper-host\local\Transient\Rider\v203\SolutionCaches\_Dalamud.ChatCoordinates.1741214380.00" t="ExcludeRecursive" />
+    <e p="C:\Users\kij\AppData\Roaming\JetBrains\Rider2020.3\extensions" t="IncludeRecursive" />
     <e p="C:\Users\kij\Desktop\dev\Dalamud.ChatCoordinates" t="IncludeFlat">
       <e p="Dalamud.ChatCoordinates" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
         <e p="ChatCoordinates.json" t="Include" />
         <e p="ChatCoordinatesPlugin.cs" t="Include" />
+        <e p="CoordinateHelper.cs" t="Include" />
         <e p="Dalamud.ChatCoordinates.csproj" t="IncludeRecursive" />
+        <e p="Managers" t="Include">
+          <e p="AetheryteManager.cs" t="Include" />
+          <e p="TerritoryManager.cs" t="Include" />
+        </e>
+        <e p="Models" t="Include">
+          <e p="AetheryteDetail.cs" t="Include" />
+          <e p="TerritoryDetail.cs" t="Include" />
+        </e>
         <e p="obj" t="ExcludeRecursive" />
         <e p="Properties" t="Include">
           <e p="AssemblyInfo.cs" t="Include" />
         </e>
-        <e p="TerritoryDetail.cs" t="Include" />
-        <e p="TerritoryManager.cs" t="Include" />
       </e>
       <e p="Dalamud.ChatCoordinates.sln" t="IncludeFlat" />
       <e p="packages" t="ExcludeRecursive" />

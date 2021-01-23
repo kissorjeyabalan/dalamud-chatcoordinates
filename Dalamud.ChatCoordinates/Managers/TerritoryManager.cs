@@ -1,16 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using ChatCoordinates.Models;
 using Dalamud.Plugin;
 using Lumina.Excel.GeneratedSheets;
 
-namespace ChatCoordinates
+namespace ChatCoordinates.Managers
 {
     public class TerritoryManager
     {
         private readonly DalamudPluginInterface _pi;
-        private IEnumerable<TerritoryDetail> _territoryDetails => GetTerritoryDetails();
+        private IEnumerable<TerritoryDetail> TerritoryDetails => GetTerritoryDetails();
 
         public TerritoryManager(DalamudPluginInterface dalamudPluginInterface)
         {
@@ -19,7 +19,7 @@ namespace ChatCoordinates
 
         public TerritoryDetail GetTerritoryDetailsByPlaceName(string placeName, bool matchPartial = true)
         {
-            var territoryDetail = _territoryDetails.FirstOrDefault(x =>
+            var territoryDetail = TerritoryDetails.FirstOrDefault(x =>
                 x.PlaceName.Equals(placeName, StringComparison.OrdinalIgnoreCase) ||
                 matchPartial && x.PlaceName.ToUpper().Contains(placeName.ToUpper()));
             return territoryDetail;

@@ -2,41 +2,42 @@
 using System.Collections.Generic;
 using System.Linq;
 using ChatCoordinates.Models;
-using Dalamud.Plugin;
 using Lumina.Excel.GeneratedSheets;
 
 namespace ChatCoordinates.Managers
 {
     public class TerritoryManager
     {
-        private readonly DalamudPluginInterface _pi;
-        private IEnumerable<TerritoryDetail> TerritoryDetails => GetTerritoryDetails();
+        private DalamudWrapper _dalamudPlugin;
+        private IEnumerable<TerritoryDetail> TerritoryDetails;
 
-        public TerritoryManager(DalamudPluginInterface dalamudPluginInterface)
+        public TerritoryManager(DalamudWrapper dalamudPlugin)
         {
-            _pi = dalamudPluginInterface;
+            _dalamudPlugin = dalamudPlugin;
+            TerritoryDetails = GetTerritoryDetails();
         }
 
-        public TerritoryDetail GetTerritoryDetailsByPlaceName(string placeName, bool matchPartial = true)
+        public TerritoryDetail GetTerritoryDetailsByZoneName(string zone, bool matchPartial = true)
         {
             var territoryDetail = TerritoryDetails.FirstOrDefault(x =>
-                x.PlaceName.Equals(placeName, StringComparison.OrdinalIgnoreCase) ||
-                matchPartial && x.PlaceName.ToUpper().Contains(placeName.ToUpper()));
+                x.Name.Equals(zone, StringComparison.OrdinalIgnoreCase) ||
+                matchPartial && x.Name.ToUpper().Contains(zone.ToUpper()));
             return territoryDetail;
         }
 
-        public IEnumerable<TerritoryDetail> GetTerritoryDetails()
+        private IEnumerable<TerritoryDetail> GetTerritoryDetails()
         {
-            return (from territoryType in _pi.Data.GetExcelSheet<TerritoryType>()
+            return (from territoryType in _dalamudPlugin.GetExcelSheet<TerritoryType>()
                 let type = territoryType.Bg.RawString.Split('/')
                 where type.Length >= 3
                 where type[2] == "twn" || type[2] == "fld" || type[2] == "hou"
                 where !string.IsNullOrWhiteSpace(territoryType.Map.Value.PlaceName.Value.Name)
                 select new TerritoryDetail
                 {
-                    TerritoryType = territoryType.RowId, MapId = territoryType.Map.Value.RowId,
-                    MapSizeFactor = territoryType.Map.Value.SizeFactor,
-                    PlaceName = territoryType.Map.Value.PlaceName.Value.Name,
+                    TerritoryType = territoryType.RowId, 
+                    MapId = territoryType.Map.Value.RowId,
+                    SizeFactor = territoryType.Map.Value.SizeFactor,
+                    Name = territoryType.Map.Value.PlaceName.Value.Name,
                 }).ToList();
         }
     }

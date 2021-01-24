@@ -9,8 +9,12 @@
         <e p="bin" t="ExcludeRecursive" />
         <e p="ChatCoordinates.json" t="Include" />
         <e p="ChatCoordinatesPlugin.cs" t="Include" />
-        <e p="CoordinateHelper.cs" t="Include" />
         <e p="Dalamud.ChatCoordinates.csproj" t="IncludeRecursive" />
+        <e p="DalamudWrapper.cs" t="Include" />
+        <e p="extensions" t="Include">
+          <e p="StringExtensions.cs" t="Include" />
+          <e p="Vector2Extensions.cs" t="Include" />
+        </e>
         <e p="Managers" t="Include">
           <e p="AetheryteManager.cs" t="Include" />
           <e p="TerritoryManager.cs" t="Include" />

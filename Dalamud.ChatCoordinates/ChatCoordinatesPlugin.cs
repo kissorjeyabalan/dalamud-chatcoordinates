@@ -182,7 +182,23 @@ namespace ChatCoordinates
 
         private void ShowHelp(string cmd)
         {
-            
+            switch (cmd)
+            {
+                case "/coord":
+                    _dalamudPlugin.Print("Places a map marker at given coordinates. Colon (:) can be used a delimiter to place marker at given zone. Placed marker can be shared by typing <flag>.");
+                    _dalamudPlugin.Print("/coord <x> <y> [: <zone>]");
+                    _dalamudPlugin.Print("/coord 8.8 11.5");
+                    _dalamudPlugin.Print("/coord 8.8,11.5");
+                    _dalamudPlugin.Print("/coord X: 10.7 Y: 11.7 : Lakeland");
+                    _dalamudPlugin.Print("/coord 10.7 11.7 : Lakeland");
+                    break;
+                case "/ctp":
+                    _dalamudPlugin.Print("Places a map marker at given coordinate and teleports to the closest aetheryte. Colon (:) is used as delimiter for zone.");
+                    _dalamudPlugin.Print("/ctp 10.7 11.7 : Lakeland");
+                    _dalamudPlugin.Print("/ctp 10.7 11.7 : Lakeland");
+                    _dalamudPlugin.Print("/ctp X: 10.7 Y: 11.7 : Lakeland");
+                    break;
+            }
         }
 
         public void Dispose()

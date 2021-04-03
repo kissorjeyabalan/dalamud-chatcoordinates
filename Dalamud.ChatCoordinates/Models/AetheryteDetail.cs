@@ -5,10 +5,10 @@ namespace ChatCoordinates.Models
 {
     public class AetheryteDetail
     {
-        public string Name;
-        public ushort SizeFactor;
+        public string Name { get; set; }
+        public ushort SizeFactor { get; set; }
         public Vector2 RawCoordinates { get; set; }
-
+        
         private float MapMarkerToMapCoord(float pos, float scale)
         {
             var num = scale / 100f;
@@ -28,12 +28,12 @@ namespace ChatCoordinates.Models
             return (int) ((float) ((pos - 1.0) * num / 41.0 * 2048.0 - 1024.0) / num * 1000f);
         }
 
-        public float Distance(Vector2 coordinates)
+        public float Distance(Coordinate coordinates)
         {
             var aetheryteX = MapMarkerToMapCoord(RawCoordinates.X, SizeFactor);
             var aetheryteY = MapMarkerToMapCoord(RawCoordinates.Y, SizeFactor);
-            var mapX = NiceCoordToMapCoord(coordinates.X, SizeFactor);
-            var mapY = NiceCoordToMapCoord(coordinates.Y, SizeFactor);
+            var mapX = NiceCoordToMapCoord(coordinates.NiceX, SizeFactor);
+            var mapY = NiceCoordToMapCoord(coordinates.NiceY, SizeFactor);
 
             var diffX = aetheryteX - mapX;
             var diffY = aetheryteY - mapY;

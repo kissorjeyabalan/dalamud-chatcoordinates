@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ChatCoordinates.Models;
@@ -8,30 +9,29 @@ namespace ChatCoordinates.Managers
 {
     public class AetheryteManager
     {
-        private DalamudWrapper _dalamudWrapper;
-        private Dictionary<uint, List<AetheryteDetail>> Aetherytes;
+        private ChatCoordinates _plugin;
+        private Dictionary<uint, List<AetheryteDetail>> _aetherytes;
 
-        public AetheryteManager(DalamudWrapper dalamudWrapper)
+        public AetheryteManager(ChatCoordinates plugin)
         {
-            _dalamudWrapper = dalamudWrapper;
-            Aetherytes = GetAetherytes();
+            _plugin = plugin ?? throw new ArgumentNullException(nameof(plugin), "ChatCoordinates cannot be null");
+            _aetherytes = LoadAetherytes();
         }
 
-        public AetheryteDetail GetClosestAetheryte(Vector2 niceCoordinates, TerritoryDetail territoryDetail)
+        public AetheryteDetail? GetClosestAetheryte(Coordinate coordinate)
         {
-            var at = GetAetherytes();
-            if (!Aetherytes.ContainsKey(territoryDetail.MapId)) return null;
-            var aetherytes = Aetherytes[territoryDetail.MapId];
+            if (!_aetherytes.ContainsKey(coordinate.TerritoryDetail!.MapId)) return null;
+            var aetherytes = _aetherytes[coordinate.TerritoryDetail!.MapId];
 
             return aetherytes.Aggregate((min, x) =>
-                min == null || x.Distance(niceCoordinates) < min.Distance(niceCoordinates) ? x : min);
+                min == null || x.Distance(coordinate) < min.Distance(coordinate) ? x : min);
         }
 
-        public Dictionary<uint, List<AetheryteDetail>> GetAetherytes()
+        private Dictionary<uint, List<AetheryteDetail>> LoadAetherytes()
         {
-            var mapMarkers = _dalamudWrapper.GetExcelSheet<MapMarker>()
+            var mapMarkers = _plugin.Interface.Data.GetExcelSheet<MapMarker>()
                 .Where(x => x.DataType == 3).ToList();
-            var aetheryteSheet = _dalamudWrapper.GetExcelSheet<Aetheryte>();
+            var aetheryteSheet = _plugin.Interface.Data.GetExcelSheet<Aetheryte>();
             var aetherytes = new Dictionary<uint, List<AetheryteDetail>>();
 
             foreach (var aetheryte in aetheryteSheet)
@@ -43,7 +43,9 @@ namespace ChatCoordinates.Managers
                 if (marker == null) continue;
 
                 if (!aetherytes.ContainsKey(aetheryte.Map.Value.RowId))
+                {
                     aetherytes.Add(aetheryte.Map.Value.RowId, new List<AetheryteDetail>());
+                }
 
                 aetherytes[aetheryte.Map.Value.RowId].Add(new AetheryteDetail
                 {

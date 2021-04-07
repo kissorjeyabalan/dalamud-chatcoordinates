@@ -10,7 +10,6 @@
         <e p="ChatCoordinates.json" t="Include" />
         <e p="Dalamud.ChatCoordinates.csproj" t="IncludeRecursive" />
         <e p="Extensions" t="Include">
-          <e p="FloatExtensions.cs" t="Include" />
           <e p="StringExtensions.cs" t="Include" />
         </e>
         <e p="Functions" t="Include">

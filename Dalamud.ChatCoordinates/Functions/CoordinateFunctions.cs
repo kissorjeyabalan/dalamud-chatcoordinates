@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using ChatCoordinates.Extensions;
 using ChatCoordinates.Models;
 using Dalamud.Game.Chat;
+using Dalamud.Game.Chat.SeStringHandling;
 using Dalamud.Game.Chat.SeStringHandling.Payloads;
 
 namespace ChatCoordinates.Functions
@@ -10,9 +12,9 @@ namespace ChatCoordinates.Functions
     {
         private bool _disposed;
 
-        private readonly global::ChatCoordinates.ChatCoordinates _plugin;
+        private readonly ChatCoordinates _plugin;
 
-        public CoordinateFunctions(global::ChatCoordinates.ChatCoordinates plugin)
+        public CoordinateFunctions(ChatCoordinates plugin)
         {
             _plugin = plugin ?? throw new ArgumentNullException(nameof(plugin), "ChatCoordinates cannot be null");
         }
@@ -35,16 +37,17 @@ namespace ChatCoordinates.Functions
                 _plugin.Interface.Data,
                 coordinate.TerritoryDetail!.TerritoryType,
                 coordinate.TerritoryDetail!.MapId,
-                coordinate.NiceX.ToRawCoordinates(coordinate.TerritoryDetail!.SizeFactor),
-                coordinate.NiceY.ToRawCoordinates(coordinate.TerritoryDetail!.SizeFactor));
+                coordinate.NiceX,
+                coordinate.NiceY,
+                0f
+            );
 
             _plugin.Interface.Framework.Gui.OpenMapWithMapLink(mapLink);
-
+            _plugin.Interface.Framework.Gui.Chat.Print(mapLink.ToString());
             _plugin.Interface.Framework.Gui.Chat.PrintChat(new XivChatEntry
             {
-                MessageBytes = _plugin.Interface.SeStringManager
-                    .CreateMapLink(coordinate.TerritoryDetail.Name, coordinate.NiceX.Sanitize(),
-                        coordinate.NiceY.Sanitize()).Encode()
+                MessageBytes = _plugin.Interface.SeStringManager.CreateMapLink(coordinate.TerritoryDetail.TerritoryType,
+                    coordinate.TerritoryDetail.MapId, coordinate.NiceX, coordinate.NiceY, 0f).Encode()
             });
         }
 

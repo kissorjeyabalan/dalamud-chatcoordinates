@@ -9,8 +9,8 @@ namespace ChatCoordinates.Managers
 {
     public class AetheryteManager
     {
-        private ChatCoordinates _plugin;
-        private Dictionary<uint, List<AetheryteDetail>> _aetherytes;
+        private readonly Dictionary<uint, List<AetheryteDetail>> _aetherytes;
+        private readonly ChatCoordinates _plugin;
 
         public AetheryteManager(ChatCoordinates plugin)
         {
@@ -43,9 +43,7 @@ namespace ChatCoordinates.Managers
                 if (marker == null) continue;
 
                 if (!aetherytes.ContainsKey(aetheryte.Map.Value.RowId))
-                {
                     aetherytes.Add(aetheryte.Map.Value.RowId, new List<AetheryteDetail>());
-                }
 
                 aetherytes[aetheryte.Map.Value.RowId].Add(new AetheryteDetail
                 {

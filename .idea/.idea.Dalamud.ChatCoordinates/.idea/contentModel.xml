@@ -26,7 +26,7 @@
           <e p="TerritoryDetail.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
-          <e p="Debug" t="Include">
+          <e p="Release" t="Include">
             <e p="net48" t="Include">
               <e p="Dalamud.ChatCoordinates.AssemblyInfo.cs" t="Include" />
             </e>

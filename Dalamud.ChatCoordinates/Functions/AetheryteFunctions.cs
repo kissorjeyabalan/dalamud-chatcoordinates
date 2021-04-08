@@ -5,7 +5,7 @@ namespace ChatCoordinates.Functions
 {
     public class AetheryteFunctions
     {
-        private ChatCoordinates _plugin;
+        private readonly ChatCoordinates _plugin;
 
         public AetheryteFunctions(ChatCoordinates plugin)
         {
@@ -30,13 +30,9 @@ namespace ChatCoordinates.Functions
                 if (aetheryte != null)
                 {
                     if (coordinate.UseTicket)
-                    {
                         tpTicketCmd.Handler.Invoke("/tpt", aetheryte.Name);
-                    }
                     else
-                    {
                         tpCmd.Handler.Invoke("/tp", aetheryte.Name);
-                    }
                 }
                 else
                 {
@@ -45,7 +41,8 @@ namespace ChatCoordinates.Functions
             }
             else
             {
-                _plugin.Interface.Framework.Gui.Chat.PrintError("Teleporting requires Teleporter plugin to be installed.");
+                _plugin.Interface.Framework.Gui.Chat.PrintError(
+                    "Teleporting requires Teleporter plugin to be installed.");
             }
         }
     }

@@ -7,7 +7,7 @@ namespace ChatCoordinates.Extensions
 {
     public static class StringExtensions
     {
-        public static Coordinate ParseCoordinate(this string arg, global::ChatCoordinates.ChatCoordinates plugin)
+        public static Coordinate ParseCoordinate(this string arg, ChatCoordinates plugin)
         {
             arg = arg.Trim().Replace("\"", "");
 
@@ -49,7 +49,7 @@ namespace ChatCoordinates.Extensions
                 UseTicket = false,
                 TerritoryDetail = zoneSpecified && zone != null && args.Length > 1
                     ? plugin.TerritoryManager.GetByZoneName(zone)
-                    : plugin.TerritoryManager.GetByTerritoryType(plugin.Interface.ClientState.TerritoryType),
+                    : plugin.TerritoryManager.GetByTerritoryType(plugin.Interface.ClientState.TerritoryType)
             };
         }
     }

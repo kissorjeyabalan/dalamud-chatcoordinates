@@ -8,10 +8,10 @@ namespace ChatCoordinates.Managers
 {
     public class TerritoryManager
     {
-        private global::ChatCoordinates.ChatCoordinates _plugin;
-        private IEnumerable<TerritoryDetail> _territoryDetails;
+        private readonly ChatCoordinates _plugin;
+        private readonly IEnumerable<TerritoryDetail> _territoryDetails;
 
-        public TerritoryManager(global::ChatCoordinates.ChatCoordinates plugin)
+        public TerritoryManager(ChatCoordinates plugin)
         {
             _plugin = plugin ?? throw new ArgumentNullException(nameof(plugin), "ChatCoordinates cannot be null.");
             _territoryDetails = LoadTerritoryDetails();
@@ -43,7 +43,7 @@ namespace ChatCoordinates.Managers
                     TerritoryType = territoryType.RowId,
                     MapId = territoryType.Map.Value.RowId,
                     SizeFactor = territoryType.Map.Value.SizeFactor,
-                    Name = territoryType.Map.Value.PlaceName.Value.Name,
+                    Name = territoryType.Map.Value.PlaceName.Value.Name
                 }).ToList();
         }
 

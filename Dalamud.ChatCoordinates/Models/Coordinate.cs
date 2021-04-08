@@ -4,7 +4,7 @@
     {
         public float NiceX { get; set; }
         public float NiceY { get; set; }
-        
+
         public string? Zone { get; set; }
         public bool ZoneSpecified { get; set; } = false;
 

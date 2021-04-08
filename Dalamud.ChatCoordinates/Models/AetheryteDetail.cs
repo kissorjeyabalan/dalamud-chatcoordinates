@@ -5,10 +5,10 @@ namespace ChatCoordinates.Models
 {
     public class AetheryteDetail
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
         public ushort SizeFactor { get; set; }
         public Vector2 RawCoordinates { get; set; }
-        
+
         private float MapMarkerToMapCoord(float pos, float scale)
         {
             var num = scale / 100f;

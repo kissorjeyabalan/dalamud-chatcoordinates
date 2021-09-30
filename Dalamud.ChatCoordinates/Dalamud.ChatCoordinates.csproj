@@ -5,8 +5,8 @@
         <Nullable>enable</Nullable>
         <RootNamespace>ChatCoordinates</RootNamespace>
         <AssemblyName>ChatCoordinates</AssemblyName>
-        <AssemblyVersion>2.0.0.0</AssemblyVersion>
-        <FileVersion>2.0.0.0</FileVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+        <FileVersion>2.1.0.0.</FileVersion>
         <TargetFramework>net48</TargetFramework>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
@@ -20,14 +20,14 @@
       <Reference Include="ImGuiScene, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>C:\Users\kij\AppData\Roaming\XIVLauncher\addon\Hooks\dev\ImGuiScene.dll</HintPath>
       </Reference>
-      <Reference Include="Lumina, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>C:\Users\kij\AppData\Roaming\XIVLauncher\addon\Hooks\5.2.4.6\Lumina.dll</HintPath>
+      <Reference Include="Lumina, Version=3.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>C:\Users\kij\AppData\Roaming\XIVLauncher\addon\Hooks\dev\Lumina.dll</HintPath>
       </Reference>
       <Reference Include="Lumina.Excel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>C:\Users\kij\AppData\Roaming\XIVLauncher\addon\Hooks\5.2.4.6\Lumina.Excel.dll</HintPath>
+        <HintPath>C:\Users\kij\AppData\Roaming\XIVLauncher\addon\Hooks\dev\Lumina.Excel.dll</HintPath>
       </Reference>
       <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-        <HintPath>C:\Users\kij\AppData\Roaming\XIVLauncher\addon\Hooks\5.2.4.6\System.Numerics.Vectors.dll</HintPath>
+        <HintPath>C:\Users\kij\AppData\Roaming\XIVLauncher\addon\Hooks\dev\System.Numerics.Vectors.dll</HintPath>
       </Reference>
     </ItemGroup>
 </Project>

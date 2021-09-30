@@ -36,12 +36,12 @@ namespace ChatCoordinates.Functions
                 }
                 else
                 {
-                    _plugin.Interface.Framework.Gui.Chat.Print("Failed to find closest aetheryte.");
+                    _plugin.PrintChat("Failed to find closest aetheryte.");
                 }
             }
             else
             {
-                _plugin.Interface.Framework.Gui.Chat.PrintError(
+                _plugin.PrintError(
                     "Teleporting requires Teleporter plugin to be installed.");
             }
         }

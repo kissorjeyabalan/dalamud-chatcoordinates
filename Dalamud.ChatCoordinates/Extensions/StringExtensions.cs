@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ChatCoordinates.Models;
@@ -35,7 +36,7 @@ namespace ChatCoordinates.Extensions
                 ySet = true;
             }
 
-            var args = arg.Split(':');
+            var args = arg.Split(new []{ plugin.Configuration.ZoneDelimiter}, StringSplitOptions.None);
             var zone = args.Last()?.Trim();
             var zoneSpecified = !float.TryParse(zone, out _);
 

@@ -19,10 +19,10 @@ namespace ChatCoordinates.Functions
             if (!coordinate.HasCoordinates()) return;
 
             if (coordinate.ZoneSpecified && coordinate.TerritoryDetail == null)
-                _plugin.Interface.Framework.Gui.Chat.PrintError($"No match found for {coordinate.Zone}.");
+                _plugin.PrintError($"No match found for {coordinate.Zone}.");
 
             if (coordinate.TerritoryDetail == null)
-                _plugin.Interface.Framework.Gui.Chat.PrintError("Failed to determine zone.");
+                _plugin.PrintError("Failed to determine zone.");
 
             var mapLink = new MapLinkPayload(
                 _plugin.Interface.Data,
@@ -37,7 +37,8 @@ namespace ChatCoordinates.Functions
             _plugin.Interface.Framework.Gui.Chat.PrintChat(new XivChatEntry
             {
                 MessageBytes = _plugin.Interface.SeStringManager.CreateMapLink(coordinate.TerritoryDetail.TerritoryType,
-                    coordinate.TerritoryDetail.MapId, coordinate.NiceX, coordinate.NiceY, 0f).Encode()
+                    coordinate.TerritoryDetail.MapId, coordinate.NiceX, coordinate.NiceY, 0f).Encode(),
+                Type = _plugin.Configuration.ChatType
             });
         }
         

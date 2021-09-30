@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
+using System.Text;
 using ChatCoordinates.Extensions;
 using ChatCoordinates.Functions;
 using ChatCoordinates.Managers;
 using ChatCoordinates.Models;
 using Dalamud.Game.Command;
+using Dalamud.Game.Text;
 using Dalamud.Plugin;
 
 namespace ChatCoordinates
@@ -21,12 +24,20 @@ namespace ChatCoordinates
         public AetheryteFunctions AetheryteFunctions { get; private set; } = null!;
         public TerritoryManager TerritoryManager => _territoryManager.Value;
         public AetheryteManager AetheryteManager => _aetheryteManager.Value;
+        
+        public Configuration Configuration { get; private set; }
+        public SettingsUi SettingsUi { get; private set; }
         public string Name => nameof(ChatCoordinates);
 
         public void Initialize(DalamudPluginInterface pluginInterface)
         {
             Interface = pluginInterface ??
                         throw new ArgumentNullException(nameof(pluginInterface), "Dalamud interface cannot be null");
+            
+            Configuration = Interface.GetPluginConfig() as Configuration ?? new Configuration();
+            Configuration.Initialize(this);
+            SettingsUi = new SettingsUi(this);
+            
             CoordinateFunctions = new CoordinateFunctions(this);
             AetheryteFunctions = new AetheryteFunctions(this);
 
@@ -36,19 +47,19 @@ namespace ChatCoordinates
 
             Interface.CommandManager.AddHandler("/coord", new CommandInfo(OnCoordinateCommand)
             {
-                HelpMessage = "/coord <x> <y> [: <partial zone name>] -- Places map marker at given coordinates"
+                HelpMessage = $"/coord <x> <y> [{Configuration.ZoneDelimiter} <partial zone name>] -- Places map marker at given coordinates"
             });
 
             Interface.CommandManager.AddHandler("/ctp", new CommandInfo(OnCoordinateTeleportCommand)
             {
                 HelpMessage =
-                    "/ctp <x> <y> [: <partial zone name>] -- Places map marker and teleports to closest aetheryte"
+                    $"/ctp <x> <y> [{Configuration.ZoneDelimiter} <partial zone name>] -- Places map marker and teleports to closest aetheryte"
             });
 
             Interface.CommandManager.AddHandler("/ctpt", new CommandInfo(OnCoordinateTeleportCommand)
             {
                 HelpMessage =
-                    "/ctpt <x> <y> [: <partial zone name>] -- Places map marker and teleports to closets aetheryte with ticket"
+                    $"/ctpt <x> <y> [{Configuration.ZoneDelimiter} <partial zone name>] -- Places map marker and teleports to closets aetheryte with ticket"
             });
         }
 
@@ -60,7 +71,14 @@ namespace ChatCoordinates
 
         private void OnCoordinateCommand(string cmd, string args)
         {
-            ProcessCoordinate(cmd, args);
+            if (string.IsNullOrWhiteSpace(args))
+            {
+                SettingsUi.Visible = true;
+            }
+            else
+            {
+                ProcessCoordinate(cmd, args);   
+            }
         }
 
         private void OnCoordinateTeleportCommand(string cmd, string args)
@@ -79,7 +97,7 @@ namespace ChatCoordinates
         {
             if (Interface.ClientState.TerritoryType == 0)
             {
-                Interface.Framework.Gui.Chat.Print(
+                PrintChat(
                     "Unable to get territory info. Please switch zone to initialize plugin.");
                 return null;
             }
@@ -101,22 +119,40 @@ namespace ChatCoordinates
             switch (cmd)
             {
                 case "/coord":
-                    Interface.Framework.Gui.Chat.Print(
-                        "Places a map marker at given coordinates. Colon (:) can be used a delimiter to place marker at given zone. Placed marker can be shared by typing <flag>.");
-                    Interface.Framework.Gui.Chat.Print("/coord <x> <y> [: <zone>]");
-                    Interface.Framework.Gui.Chat.Print("/coord 8.8 11.5");
-                    Interface.Framework.Gui.Chat.Print("/coord 8.8,11.5");
-                    Interface.Framework.Gui.Chat.Print("/coord X: 10.7 Y: 11.7 : Lakeland");
-                    Interface.Framework.Gui.Chat.Print("/coord 10.7 11.7 : Lakeland");
+                    PrintChat(
+                        $"Places a map marker at given coordinates. {Configuration.ZoneDelimiter} can be used a delimiter to place marker at given zone. Placed marker can be shared by typing <flag>.");
+                    PrintChat($"/coord <x> <y> [{Configuration.ZoneDelimiter} <zone>]");
+                    PrintChat($"/coord 8.8 11.5");
+                    PrintChat("/coord 8.8,11.5");
+                    PrintChat("/coord X: 10.7 Y: 11.7 : Lakeland");
+                    PrintChat("/coord 10.7 11.7 : Lakeland");
                     break;
                 case "/ctp":
-                    Interface.Framework.Gui.Chat.Print(
-                        "Places a map marker at given coordinate and teleports to the closest aetheryte. Colon (:) is used as delimiter for zone.");
-                    Interface.Framework.Gui.Chat.Print("/ctp 10.7 11.7 : Lakeland");
-                    Interface.Framework.Gui.Chat.Print("/ctp 10.7 11.7 : Lakeland");
-                    Interface.Framework.Gui.Chat.Print("/ctp X: 10.7 Y: 11.7 : Lakeland");
+                    PrintChat(
+                        $"Places a map marker at given coordinate and teleports to the closest aetheryte. {Configuration.ZoneDelimiter} is used as delimiter for zone.");
+                    PrintChat("/ctp 10.7 11.7 : Lakeland");
+                    PrintChat("/ctp 10.7 11.7 : Lakeland");
+                    PrintChat("/ctp X: 10.7 Y: 11.7 : Lakeland");
                     break;
             }
+        }
+
+        public void PrintChat(string msg)
+        {
+            Interface.Framework.Gui.Chat.PrintChat(new XivChatEntry
+            {
+                MessageBytes = Encoding.UTF8.GetBytes(msg),
+                Type = Configuration.ChatType
+            });
+        }
+        
+        public void PrintError(string msg)
+        {
+            Interface.Framework.Gui.Chat.PrintChat(new XivChatEntry
+            {
+                MessageBytes = Encoding.UTF8.GetBytes(msg),
+                Type = Configuration.ErrorChatType
+            });
         }
 
         protected virtual void Dispose(bool disposing)
@@ -130,6 +166,7 @@ namespace ChatCoordinates
                 Interface.CommandManager.RemoveHandler("/ctp");
                 Interface.CommandManager.RemoveHandler("/ctpt");
                 Interface.Dispose();
+                SettingsUi.Dispose();
             }
 
             _disposed = true;

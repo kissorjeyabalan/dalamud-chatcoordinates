@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using ChatCoordinates.Models;
+using Dalamud.Data;
 using Lumina.Excel.GeneratedSheets;
 
 namespace ChatCoordinates.Managers
 {
     public class TerritoryManager
     {
-        private readonly ChatCoordinates _plugin;
+        private readonly DataManager _data;
         private readonly IEnumerable<TerritoryDetail> _territoryDetails;
 
-        public TerritoryManager(ChatCoordinates plugin)
+        public TerritoryManager(DataManager data)
         {
-            _plugin = plugin ?? throw new ArgumentNullException(nameof(plugin), "ChatCoordinates cannot be null.");
+            _data = data;
             _territoryDetails = LoadTerritoryDetails();
         }
 
@@ -33,7 +34,7 @@ namespace ChatCoordinates.Managers
 
         private IEnumerable<TerritoryDetail> LoadTerritoryDetails()
         {
-            return (from territoryType in _plugin.Interface.Data.GetExcelSheet<TerritoryType>()
+            return (from territoryType in _data.GetExcelSheet<TerritoryType>()
                 let type = territoryType.Bg.RawString.Split('/')
                 where type.Length >= 3
                 where type[2] == "twn" || type[2] == "fld" || type[2] == "hou"

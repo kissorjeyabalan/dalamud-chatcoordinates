@@ -1,17 +1,21 @@
 ﻿using System;
 using ChatCoordinates.Models;
+using Dalamud.Game.Gui;
 using Dalamud.Game.Text;
+using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Game.Text.SeStringHandling.Payloads;
 
 namespace ChatCoordinates.Functions
 {
     public class CoordinateFunctions : IDisposable
     {
-        private readonly ChatCoordinates _plugin;
+        private readonly CCPlugin _plugin;
+        private GameGui _gameGui;
 
-        public CoordinateFunctions(ChatCoordinates plugin)
+        public CoordinateFunctions(CCPlugin plugin, GameGui gameGui)
         {
             _plugin = plugin ?? throw new ArgumentNullException(nameof(plugin), "ChatCoordinates cannot be null");
+            _gameGui = gameGui;
         }
 
         public void PlaceMarker(Coordinate coordinate)
@@ -25,7 +29,6 @@ namespace ChatCoordinates.Functions
                 _plugin.PrintError("Failed to determine zone.");
 
             var mapLink = new MapLinkPayload(
-                _plugin.Interface.Data,
                 coordinate.TerritoryDetail!.TerritoryType,
                 coordinate.TerritoryDetail!.MapId,
                 coordinate.NiceX,
@@ -33,12 +36,12 @@ namespace ChatCoordinates.Functions
                 0f
             );
 
-            _plugin.Interface.Framework.Gui.OpenMapWithMapLink(mapLink);
-            _plugin.Interface.Framework.Gui.Chat.PrintChat(new XivChatEntry
+            _gameGui.OpenMapWithMapLink(mapLink);
+            _plugin.PrintChat(new XivChatEntry
             {
-                MessageBytes = _plugin.Interface.SeStringManager.CreateMapLink(coordinate.TerritoryDetail.TerritoryType,
-                    coordinate.TerritoryDetail.MapId, coordinate.NiceX, coordinate.NiceY, 0f).Encode(),
-                Type = _plugin.Configuration.ChatType
+                Message = SeString.CreateMapLink(coordinate.TerritoryDetail.TerritoryType,
+                    coordinate.TerritoryDetail.MapId, coordinate.NiceX, coordinate.NiceY, 0f),
+                Type = _plugin.Configuration.GeneralChatType
             });
         }
         

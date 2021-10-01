@@ -5,7 +5,7 @@ namespace ChatCoordinates.Models
 {
     public class AetheryteDetail
     {
-        public string Name { get; set; } = null!;
+        public string? Name { get; set; } = null!;
         public ushort SizeFactor { get; set; }
         public Vector2 RawCoordinates { get; set; }
 

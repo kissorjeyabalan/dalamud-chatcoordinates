@@ -5,9 +5,9 @@ namespace ChatCoordinates.Functions
 {
     public class AetheryteFunctions
     {
-        private readonly ChatCoordinates _plugin;
+        private readonly CCPlugin _plugin;
 
-        public AetheryteFunctions(ChatCoordinates plugin)
+        public AetheryteFunctions(CCPlugin plugin)
         {
             _plugin = plugin ?? throw new ArgumentNullException(nameof(plugin), "ChatCoordinates cannot be null");
         }
@@ -16,12 +16,12 @@ namespace ChatCoordinates.Functions
         {
             if (!coordinate.Teleport) return;
 
-            var tpCmd = _plugin.Interface.CommandManager.Commands.ContainsKey("/tp")
-                ? _plugin.Interface.CommandManager.Commands["/tp"]
+            var tpCmd = _plugin.CommandManager.Commands.ContainsKey("/tp")
+                ? _plugin.CommandManager.Commands["/tp"]
                 : null;
 
-            var tpTicketCmd = _plugin.Interface.CommandManager.Commands.ContainsKey("/tpt")
-                ? _plugin.Interface.CommandManager.Commands["/tpt"]
+            var tpTicketCmd = _plugin.CommandManager.Commands.ContainsKey("/tpt")
+                ? _plugin.CommandManager.Commands["/tpt"]
                 : null;
 
             if (tpCmd != null && tpTicketCmd != null)

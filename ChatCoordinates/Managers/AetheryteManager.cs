@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ChatCoordinates.Models;
+using Dalamud.Data;
+using Lumina.Excel;
 using Lumina.Excel.GeneratedSheets;
 
 namespace ChatCoordinates.Managers
@@ -10,11 +12,11 @@ namespace ChatCoordinates.Managers
     public class AetheryteManager
     {
         private readonly Dictionary<uint, List<AetheryteDetail>> _aetherytes;
-        private readonly ChatCoordinates _plugin;
+        private readonly DataManager _data;
 
-        public AetheryteManager(ChatCoordinates plugin)
+        public AetheryteManager(DataManager data)
         {
-            _plugin = plugin ?? throw new ArgumentNullException(nameof(plugin), "ChatCoordinates cannot be null");
+            _data = data;
             _aetherytes = LoadAetherytes();
         }
 
@@ -29,9 +31,9 @@ namespace ChatCoordinates.Managers
 
         private Dictionary<uint, List<AetheryteDetail>> LoadAetherytes()
         {
-            var mapMarkers = _plugin.Interface.Data.GetExcelSheet<MapMarker>()
+            var mapMarkers = _data.GetExcelSheet<MapMarker>()
                 .Where(x => x.DataType == 3).ToList();
-            var aetheryteSheet = _plugin.Interface.Data.GetExcelSheet<Aetheryte>();
+            var aetheryteSheet = _data.GetExcelSheet<Aetheryte>();
             var aetherytes = new Dictionary<uint, List<AetheryteDetail>>();
 
             foreach (var aetheryte in aetheryteSheet)

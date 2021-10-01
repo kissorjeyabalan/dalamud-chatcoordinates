@@ -1,84 +1,83 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Text;
+using ChatCoordinates.Configuration;
 using ChatCoordinates.Extensions;
 using ChatCoordinates.Functions;
 using ChatCoordinates.Managers;
 using ChatCoordinates.Models;
+using Dalamud.Data;
+using Dalamud.Game.ClientState;
 using Dalamud.Game.Command;
+using Dalamud.Game.Gui;
 using Dalamud.Game.Text;
+using Dalamud.Game.Text.SeStringHandling;
+using Dalamud.IoC;
 using Dalamud.Plugin;
 
 namespace ChatCoordinates
 {
-    public class ChatCoordinates : IDalamudPlugin
-
+    public class CCPlugin : IDalamudPlugin
     {
+        public string Name => "ChatCoordinates";
+        public Config Configuration { get; init; }
+        public ConfigUi ConfigUi { get; init; }
+        public DalamudPluginInterface Interface { get; init; }
+        public CommandManager CommandManager { get; init; }
+        public ClientState ClientState { get; init; }
+        public ChatGui ChatGui { get; init; }
+
         private Lazy<AetheryteManager> _aetheryteManager = null!;
-        private bool _disposed;
-
         private Lazy<TerritoryManager> _territoryManager = null!;
-
-        public DalamudPluginInterface Interface { get; private set; } = null!;
-        public CoordinateFunctions CoordinateFunctions { get; private set; } = null!;
-        public AetheryteFunctions AetheryteFunctions { get; private set; } = null!;
         public TerritoryManager TerritoryManager => _territoryManager.Value;
         public AetheryteManager AetheryteManager => _aetheryteManager.Value;
-        
-        public Configuration Configuration { get; private set; }
-        public SettingsUi SettingsUi { get; private set; }
-        public string Name => nameof(ChatCoordinates);
+        public CoordinateFunctions CoordinateFunctions { get; private set; } = null!;
+        public AetheryteFunctions AetheryteFunctions { get; private set; } = null!;
 
-        public void Initialize(DalamudPluginInterface pluginInterface)
+        public CCPlugin(
+            [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
+            [RequiredVersion("1.0")] CommandManager commandManager,
+            [RequiredVersion("1.0")] DataManager dataManager,
+            [RequiredVersion("1.0")] GameGui gameGui,
+            [RequiredVersion("1.0")] ClientState clientState,
+            [RequiredVersion("1.0")] ChatGui chatGui
+        )
         {
-            Interface = pluginInterface ??
-                        throw new ArgumentNullException(nameof(pluginInterface), "Dalamud interface cannot be null");
-            
-            Configuration = Interface.GetPluginConfig() as Configuration ?? new Configuration();
-            Configuration.Initialize(this);
-            SettingsUi = new SettingsUi(this);
-            
-            CoordinateFunctions = new CoordinateFunctions(this);
+            Interface = pluginInterface;
+            CommandManager = commandManager;
+            ClientState = clientState;
+            ChatGui = chatGui;
+
+            Configuration = Interface.GetPluginConfig() as Config ?? new Config();
+            Configuration.Initialize(Interface);
+            ConfigUi = new ConfigUi(this);
+
+            CoordinateFunctions = new CoordinateFunctions(this, gameGui);
             AetheryteFunctions = new AetheryteFunctions(this);
+            _territoryManager = new Lazy<TerritoryManager>(() => new TerritoryManager(dataManager));
+            _aetheryteManager = new Lazy<AetheryteManager>(() => new AetheryteManager(dataManager));
 
-            _territoryManager = new Lazy<TerritoryManager>(() => new TerritoryManager(this));
-            _aetheryteManager = new Lazy<AetheryteManager>(() => new AetheryteManager(this));
-
-
-            Interface.CommandManager.AddHandler("/coord", new CommandInfo(OnCoordinateCommand)
+            CommandManager.AddHandler("/coord", new CommandInfo(OnCoordinateCommand)
             {
-                HelpMessage = $"/coord <x> <y> [{Configuration.ZoneDelimiter} <partial zone name>] -- Places map marker at given coordinates"
+                HelpMessage =
+                    $"/coord <x> <y> [{Configuration.ZoneDelimiter} <partial zone name>] -- Places map marker at given coordinates"
             });
 
-            Interface.CommandManager.AddHandler("/ctp", new CommandInfo(OnCoordinateTeleportCommand)
+            CommandManager.AddHandler("/ctp", new CommandInfo(OnCoordinateTeleportCommand)
             {
                 HelpMessage =
                     $"/ctp <x> <y> [{Configuration.ZoneDelimiter} <partial zone name>] -- Places map marker and teleports to closest aetheryte"
             });
 
-            Interface.CommandManager.AddHandler("/ctpt", new CommandInfo(OnCoordinateTeleportCommand)
+            CommandManager.AddHandler("/ctpt", new CommandInfo(OnCoordinateTeleportCommand)
             {
                 HelpMessage =
                     $"/ctpt <x> <y> [{Configuration.ZoneDelimiter} <partial zone name>] -- Places map marker and teleports to closets aetheryte with ticket"
             });
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
         private void OnCoordinateCommand(string cmd, string args)
         {
-            if (string.IsNullOrWhiteSpace(args))
-            {
-                SettingsUi.Visible = true;
-            }
-            else
-            {
-                ProcessCoordinate(cmd, args);   
-            }
+            ProcessCoordinate(cmd, args);
         }
 
         private void OnCoordinateTeleportCommand(string cmd, string args)
@@ -95,14 +94,20 @@ namespace ChatCoordinates
 
         private Coordinate? ProcessCoordinate(string cmd, string args)
         {
-            if (Interface.ClientState.TerritoryType == 0)
+            if (ClientState.TerritoryType == 0)
             {
                 PrintChat(
                     "Unable to get territory info. Please switch zone to initialize plugin.");
                 return null;
             }
 
-            if (string.IsNullOrWhiteSpace(args) || args.Equals("help", StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrWhiteSpace(args))
+            {
+                ConfigUi.Visible = true;
+                return null;
+            }
+
+            if (args.Equals("help", StringComparison.OrdinalIgnoreCase))
             {
                 ShowHelp(cmd);
                 return null;
@@ -113,7 +118,7 @@ namespace ChatCoordinates
 
             return coordinate;
         }
-
+        
         private void ShowHelp(string cmd)
         {
             switch (cmd)
@@ -136,40 +141,36 @@ namespace ChatCoordinates
                     break;
             }
         }
-
+        
         public void PrintChat(string msg)
         {
-            Interface.Framework.Gui.Chat.PrintChat(new XivChatEntry
+            ChatGui.PrintChat(new XivChatEntry()
             {
-                MessageBytes = Encoding.UTF8.GetBytes(msg),
-                Type = Configuration.ChatType
+                Message = msg,
+                Type = Configuration.GeneralChatType
             });
         }
-        
+
         public void PrintError(string msg)
         {
-            Interface.Framework.Gui.Chat.PrintChat(new XivChatEntry
+            ChatGui.PrintChat(new XivChatEntry()
             {
-                MessageBytes = Encoding.UTF8.GetBytes(msg),
+                Message = msg,
                 Type = Configuration.ErrorChatType
             });
         }
-
-        protected virtual void Dispose(bool disposing)
+        
+        public void PrintChat(XivChatEntry msg)
         {
-            if (_disposed) return;
-            if (disposing)
-            {
-                CoordinateFunctions.Dispose();
+            ChatGui.PrintChat(msg);
+        }
 
-                Interface.CommandManager.RemoveHandler("/coord");
-                Interface.CommandManager.RemoveHandler("/ctp");
-                Interface.CommandManager.RemoveHandler("/ctpt");
-                Interface.Dispose();
-                SettingsUi.Dispose();
-            }
-
-            _disposed = true;
+        public void Dispose()
+        {
+            CommandManager.RemoveHandler("/coord");
+            CommandManager.RemoveHandler("/ctp");
+            CommandManager.RemoveHandler("/ctpt");
+            ConfigUi.Dispose();
         }
     }
 }

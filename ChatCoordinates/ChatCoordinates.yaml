@@ -1,0 +1,10 @@
+name: ChatCoordinates
+author: kij
+punchline: Places flag marker on map from coordinates in chat.
+description: |-
+  Places flag marker on map from coordinates in chat.
+  Opens map with given coordinates for current or given zone.
+  See "/coord" for configuration and usage info.
+repo_url: https://github.com/kissorjeyabalan/dalamud-chatcoordinates
+categoryTags:
+  - utility

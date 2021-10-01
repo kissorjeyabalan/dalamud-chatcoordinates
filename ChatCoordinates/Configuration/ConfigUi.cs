@@ -4,13 +4,15 @@ using System.Numerics;
 using Dalamud.Game.Text;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
+using Dalamud.Plugin;
+using FFXIVClientStructs.FFXIV.Client.Graphics.Scene;
 using ImGuiNET;
 
-namespace ChatCoordinates
+namespace ChatCoordinates.Configuration
 {
-    public class SettingsUi : IDisposable
+    public class ConfigUi : IDisposable
     {
-        private ChatCoordinates _plugin;
+        private CCPlugin _plugin;
 
         private bool _visible = false;
 
@@ -20,20 +22,18 @@ namespace ChatCoordinates
             set => _visible = value;
         }
 
-
-        public SettingsUi(ChatCoordinates plugin)
+        public ConfigUi(CCPlugin plugin)
         {
             _plugin = plugin;
-            _plugin.Interface.UiBuilder.OnBuildUi += Draw;
-            _plugin.Interface.UiBuilder.OnOpenConfigUi += (_, _) => { Visible = true; };
+            _plugin.Interface.UiBuilder.Draw += DrawUI;
+            _plugin.Interface.UiBuilder.OpenConfigUi += DrawConfigUI;
         }
 
-        public void Draw()
+        public void DrawConfigUI()
         {
-            DrawWindow();
+            Visible = true;
         }
-
-        public void DrawWindow()
+        public void DrawUI()
         {
             if (!Visible) return;
 
@@ -61,12 +61,12 @@ namespace ChatCoordinates
 
                 ImGui.TextUnformatted("General Chat Channel");
 
-                if (ImGui.BeginCombo("##CoordChat", _plugin.Configuration.ChatType.ToString()))
+                if (ImGui.BeginCombo("##CoordChat", _plugin.Configuration.GeneralChatType.ToString()))
                 {
                     foreach (var chatType in xivChatTypes.Where(chatType =>
-                        ImGui.Selectable(chatType.ToString(), chatType == _plugin.Configuration.ChatType)))
+                        ImGui.Selectable(chatType.ToString(), chatType == _plugin.Configuration.GeneralChatType)))
                     {
-                        _plugin.Configuration.ChatType = chatType;
+                        _plugin.Configuration.GeneralChatType = chatType;
                     }
 
                     ImGui.EndCombo();
@@ -117,10 +117,8 @@ namespace ChatCoordinates
             ImGui.End();
         }
 
-
         public void Dispose()
         {
-            // intentionally empty
         }
     }
 }

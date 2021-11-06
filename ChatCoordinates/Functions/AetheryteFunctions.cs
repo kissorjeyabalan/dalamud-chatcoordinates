@@ -20,19 +20,12 @@ namespace ChatCoordinates.Functions
                 ? _plugin.CommandManager.Commands["/tp"]
                 : null;
 
-            var tpTicketCmd = _plugin.CommandManager.Commands.ContainsKey("/tpt")
-                ? _plugin.CommandManager.Commands["/tpt"]
-                : null;
-
-            if (tpCmd != null && tpTicketCmd != null)
+            if (tpCmd != null)
             {
                 var aetheryte = _plugin.AetheryteManager.GetClosestAetheryte(coordinate);
                 if (aetheryte != null)
                 {
-                    if (coordinate.UseTicket)
-                        tpTicketCmd.Handler.Invoke("/tpt", aetheryte.Name);
-                    else
-                        tpCmd.Handler.Invoke("/tp", aetheryte.Name);
+                    tpCmd.Handler.Invoke("/tp", aetheryte.Name);
                 }
                 else
                 {

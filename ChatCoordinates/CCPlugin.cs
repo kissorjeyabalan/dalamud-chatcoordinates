@@ -67,12 +67,6 @@ namespace ChatCoordinates
                 HelpMessage =
                     $"/ctp <x> <y> [{Configuration.ZoneDelimiter} <partial zone name>] -- Places map marker and teleports to closest aetheryte"
             });
-
-            CommandManager.AddHandler("/ctpt", new CommandInfo(OnCoordinateTeleportCommand)
-            {
-                HelpMessage =
-                    $"/ctpt <x> <y> [{Configuration.ZoneDelimiter} <partial zone name>] -- Places map marker and teleports to closets aetheryte with ticket"
-            });
         }
 
         private void OnCoordinateCommand(string cmd, string args)
@@ -86,8 +80,6 @@ namespace ChatCoordinates
             if (coordinate == null) return;
 
             coordinate.Teleport = true;
-
-            if (cmd.ToLower().Equals("/ctpt")) coordinate.UseTicket = true;
 
             AetheryteFunctions.Teleport(coordinate);
         }
@@ -169,7 +161,6 @@ namespace ChatCoordinates
         {
             CommandManager.RemoveHandler("/coord");
             CommandManager.RemoveHandler("/ctp");
-            CommandManager.RemoveHandler("/ctpt");
             ConfigUi.Dispose();
         }
     }

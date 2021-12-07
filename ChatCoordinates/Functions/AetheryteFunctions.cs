@@ -23,7 +23,7 @@ namespace ChatCoordinates.Functions
             if (tpCmd != null)
             {
                 var aetheryte = _plugin.AetheryteManager.GetClosestAetheryte(coordinate);
-                if (aetheryte != null)
+                if (aetheryte != null && !string.IsNullOrWhiteSpace(aetheryte.Name))
                 {
                     tpCmd.Handler.Invoke("/tp", aetheryte.Name);
                 }

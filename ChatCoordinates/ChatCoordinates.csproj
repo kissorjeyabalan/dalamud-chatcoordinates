@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <Authors>kij</Authors>
-        <Version>2.1.0.0</Version>
+        <Version>2.1.1.0</Version>
         <Description>Place flag markers on map from chat command.</Description>
         <PackageProjectUrl>https://github.com/kissorjeyabalan/dalamud-chatcoordinates</PackageProjectUrl>
     </PropertyGroup>

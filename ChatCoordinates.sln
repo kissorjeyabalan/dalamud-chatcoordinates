@@ -1,22 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-VisualStudioVersion = 16.0.29709.97
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatCoordinates", "ChatCoordinates\ChatCoordinates.csproj", "{AF66209B-2DB8-4DCA-BC4A-9B9D6D3262E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatCoordinates", "ChatCoordinates\ChatCoordinates.csproj", "{AF66209B-2DB8-4DCA-BC4A-9B9D6D3262E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
-								Release|x64 = Release|x64
+		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF66209B-2DB8-4DCA-BC4A-9B9D6D3262E3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AF66209B-2DB8-4DCA-BC4A-9B9D6D3262E3}.Debug|x64.Build.0 = Debug|Any CPU
 		{AF66209B-2DB8-4DCA-BC4A-9B9D6D3262E3}.Release|x64.ActiveCfg = Release|x64
 		{AF66209B-2DB8-4DCA-BC4A-9B9D6D3262E3}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
-								HideSolutionNode = FALSE
+		HideSolutionNode = FALSE
 	EndGlobalSection
-				GlobalSection(ExtensibilityGlobals) = postSolution
-								SolutionGuid = {9DA69789-B891-4E3A-BF3B-85C440649DFA}
-				EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9DA69789-B891-4E3A-BF3B-85C440649DFA}
+	EndGlobalSection
 EndGlobal

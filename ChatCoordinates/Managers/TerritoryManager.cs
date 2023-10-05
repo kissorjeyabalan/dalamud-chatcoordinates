@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using ChatCoordinates.Models;
-using Dalamud.Data;
+using Dalamud.Plugin.Services;
 using Lumina.Excel.GeneratedSheets;
 
 namespace ChatCoordinates.Managers
 {
     public class TerritoryManager
     {
-        private readonly DataManager _data;
+        private readonly IDataManager _data;
         private readonly IEnumerable<TerritoryDetail> _territoryDetails;
 
-        public TerritoryManager(DataManager data)
+        public TerritoryManager(IDataManager data)
         {
             _data = data;
             _territoryDetails = LoadTerritoryDetails();

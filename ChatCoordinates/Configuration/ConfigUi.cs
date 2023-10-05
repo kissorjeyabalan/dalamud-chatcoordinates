@@ -2,10 +2,8 @@
 using System.Linq;
 using System.Numerics;
 using Dalamud.Game.Text;
-using Dalamud.Interface;
 using Dalamud.Interface.Colors;
-using Dalamud.Plugin;
-using FFXIVClientStructs.FFXIV.Client.Graphics.Scene;
+using Dalamud.Interface.Utility;
 using ImGuiNET;
 
 namespace ChatCoordinates.Configuration

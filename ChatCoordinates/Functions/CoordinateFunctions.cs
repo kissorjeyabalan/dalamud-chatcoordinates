@@ -1,18 +1,18 @@
 ﻿using System;
 using ChatCoordinates.Models;
-using Dalamud.Game.Gui;
 using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Game.Text.SeStringHandling.Payloads;
+using Dalamud.Plugin.Services;
 
 namespace ChatCoordinates.Functions
 {
     public class CoordinateFunctions : IDisposable
     {
         private readonly CCPlugin _plugin;
-        private GameGui _gameGui;
+        private IGameGui _gameGui;
 
-        public CoordinateFunctions(CCPlugin plugin, GameGui gameGui)
+        public CoordinateFunctions(CCPlugin plugin, IGameGui gameGui)
         {
             _plugin = plugin ?? throw new ArgumentNullException(nameof(plugin), "ChatCoordinates cannot be null");
             _gameGui = gameGui;

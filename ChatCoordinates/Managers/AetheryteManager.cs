@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ChatCoordinates.Models;
-using Dalamud.Data;
-using Lumina.Excel;
+using Dalamud.Plugin.Services;
 using Lumina.Excel.GeneratedSheets;
 
 namespace ChatCoordinates.Managers
@@ -12,9 +10,9 @@ namespace ChatCoordinates.Managers
     public class AetheryteManager
     {
         private readonly Dictionary<uint, List<AetheryteDetail>> _aetherytes;
-        private readonly DataManager _data;
+        private readonly IDataManager _data;
 
-        public AetheryteManager(DataManager data)
+        public AetheryteManager(IDataManager data)
         {
             _data = data;
             _aetherytes = LoadAetherytes();

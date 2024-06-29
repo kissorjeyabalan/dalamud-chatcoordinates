@@ -6,7 +6,6 @@ using ChatCoordinates.Managers;
 using ChatCoordinates.Models;
 using Dalamud.Game.Command;
 using Dalamud.Game.Text;
-using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 
@@ -30,12 +29,12 @@ namespace ChatCoordinates
         public AetheryteFunctions AetheryteFunctions { get; private set; } = null!;
 
         public CCPlugin(
-            [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
-            [RequiredVersion("1.0")] ICommandManager commandManager,
-            [RequiredVersion("1.0")] IDataManager dataManager,
-            [RequiredVersion("1.0")] IGameGui gameGui,
-            [RequiredVersion("1.0")] IClientState clientState,
-            [RequiredVersion("1.0")] IChatGui chatGui
+            DalamudPluginInterface pluginInterface,
+            ICommandManager commandManager,
+            IDataManager dataManager,
+            IGameGui gameGui,
+            IClientState clientState,
+            IChatGui chatGui
         )
         {
             Interface = pluginInterface;

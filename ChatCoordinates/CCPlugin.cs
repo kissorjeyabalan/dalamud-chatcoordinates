@@ -16,7 +16,7 @@ namespace ChatCoordinates
         public string Name => "ChatCoordinates";
         public Config Configuration { get; init; }
         public ConfigUi ConfigUi { get; init; }
-        public DalamudPluginInterface Interface { get; init; }
+        public IDalamudPluginInterface Interface { get; init; }
         public ICommandManager CommandManager { get; init; }
         public IClientState ClientState { get; init; }
         public IChatGui ChatGui { get; init; }
@@ -29,7 +29,7 @@ namespace ChatCoordinates
         public AetheryteFunctions AetheryteFunctions { get; private set; } = null!;
 
         public CCPlugin(
-            DalamudPluginInterface pluginInterface,
+            IDalamudPluginInterface pluginInterface,
             ICommandManager commandManager,
             IDataManager dataManager,
             IGameGui gameGui,

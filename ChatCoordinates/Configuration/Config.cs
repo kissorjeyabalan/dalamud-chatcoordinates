@@ -7,7 +7,7 @@ namespace ChatCoordinates.Configuration
 {
     public class Config : IPluginConfiguration
     {
-        [NonSerialized] private DalamudPluginInterface? _pluginInterface;
+        [NonSerialized] private IDalamudPluginInterface? _pluginInterface;
         
         public int Version { get; set; } = 1;
 
@@ -15,7 +15,7 @@ namespace ChatCoordinates.Configuration
         public XivChatType GeneralChatType { get; set; } = XivChatType.Debug;
         public XivChatType ErrorChatType { get; set; } = XivChatType.Urgent;
 
-        public void Initialize(DalamudPluginInterface pluginInterface)
+        public void Initialize(IDalamudPluginInterface pluginInterface)
         {
             _pluginInterface = pluginInterface;
         }

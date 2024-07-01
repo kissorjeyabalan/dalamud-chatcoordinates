@@ -2,7 +2,7 @@
 
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net8.0-windows</TargetFramework>
         <LangVersion>preview</LangVersion>
         <PlatformTarget>x64</PlatformTarget>
         <RootNamespace>ChatCoordinates</RootNamespace>

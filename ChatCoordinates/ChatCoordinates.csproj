@@ -7,7 +7,7 @@
         <PlatformTarget>x64</PlatformTarget>
         <RootNamespace>ChatCoordinates</RootNamespace>
         <AssemblyName>ChatCoordinates</AssemblyName>
-        <Version>2.1.2.5</Version>
+        <Version>2.1.2.6</Version>
         <Authors>kij</Authors>
         <Product>ChatCoordinates</Product>
         <Copyright>Copyright © 2024</Copyright>
@@ -44,7 +44,7 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="DalamudPackager" Version="2.1.13" />
+        <PackageReference Include="DalamudPackager" Version="11.0.0" />
         <Reference Include="FFXIVClientStructs">
             <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
             <Private>false</Private>

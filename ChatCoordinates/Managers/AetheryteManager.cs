@@ -3,7 +3,7 @@ using System.Linq;
 using System.Numerics;
 using ChatCoordinates.Models;
 using Dalamud.Plugin.Services;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 namespace ChatCoordinates.Managers
 {
@@ -20,17 +20,18 @@ namespace ChatCoordinates.Managers
 
         public AetheryteDetail? GetClosestAetheryte(Coordinate coordinate)
         {
-            if (!_aetherytes.ContainsKey(coordinate.TerritoryDetail!.MapId)) return null;
-            var aetherytes = _aetherytes[coordinate.TerritoryDetail!.MapId];
+            if (!_aetherytes.TryGetValue(coordinate.TerritoryDetail!.MapId, out var aetherytes)) return null;
 
             return aetherytes.Aggregate((min, x) =>
-                min == null || x.Distance(coordinate) < min.Distance(coordinate) ? x : min);
+                x.Distance(coordinate) < min.Distance(coordinate) ? x : min);
         }
 
         private Dictionary<uint, List<AetheryteDetail>> LoadAetherytes()
         {
-            var mapMarkers = _data.GetExcelSheet<MapMarker>()
-                .Where(x => x.DataType == 3).ToList();
+
+            var mapMarkers = _data.GetSubrowExcelSheet<MapMarker>()
+                .SelectMany(m => m).Cast<MapMarker?>()
+                .Where(m => m!.Value.DataType == 3).ToList();
             var aetheryteSheet = _data.GetExcelSheet<Aetheryte>();
             var aetherytes = new Dictionary<uint, List<AetheryteDetail>>();
 
@@ -39,7 +40,7 @@ namespace ChatCoordinates.Managers
                 if (aetheryte.RowId <= 0) continue;
                 if (!aetheryte.IsAetheryte) continue;
 
-                var marker = mapMarkers.FirstOrDefault(x => x.DataKey == aetheryte.RowId);
+                var marker = mapMarkers.FirstOrDefault(x => x!.Value.DataKey.RowId == aetheryte.RowId);
                 if (marker == null) continue;
 
                 if (!aetherytes.ContainsKey(aetheryte.Map.Value.RowId))
@@ -47,9 +48,9 @@ namespace ChatCoordinates.Managers
 
                 aetherytes[aetheryte.Map.Value.RowId].Add(new AetheryteDetail
                 {
-                    Name = aetheryte.PlaceName.Value.Name.RawString,
+                    Name = aetheryte.PlaceName.Value.Name.ToString(),
                     SizeFactor = aetheryte.Map.Value.SizeFactor,
-                    RawCoordinates = new Vector2(marker.X, marker.Y)
+                    RawCoordinates = new Vector2(marker.Value.X, marker.Value.Y)
                 });
             }
 

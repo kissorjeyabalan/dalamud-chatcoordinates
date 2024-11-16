@@ -8,4 +8,7 @@ description: |-
 repo_url: https://github.com/kissorjeyabalan/dalamud-chatcoordinates
 categoryTags:
   - utility
-dalamudapilevel: 8
+tags:
+  - utility
+  - map
+  - coordinates

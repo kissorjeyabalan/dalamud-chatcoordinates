@@ -1,77 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-
+<Project Sdk="Dalamud.NET.Sdk/12.0.2">
     <PropertyGroup>
-        <TargetFramework>net8.0-windows</TargetFramework>
-        <LangVersion>preview</LangVersion>
-        <PlatformTarget>x64</PlatformTarget>
         <RootNamespace>ChatCoordinates</RootNamespace>
         <AssemblyName>ChatCoordinates</AssemblyName>
-        <Version>2.1.2.6</Version>
+        <Version>2.1.2.7</Version>
         <Authors>kij</Authors>
         <Product>ChatCoordinates</Product>
-        <Copyright>Copyright © 2024</Copyright>
-        <Deterministic>true</Deterministic>
-        <OutputType>Library</OutputType>
-        <WarningLevel>4</WarningLevel>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <Nullable>enable</Nullable>
-        <OutputPath>bin\$(Configuration)\</OutputPath>
-        <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);MSB3277</MSBuildWarningsAsMessages>
-        <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-        <CopyLocalLockfileAssemblies>true</CopyLocalLockfileAssemblies>
         <Description>Place flag markers on map from chat command.</Description>
         <PackageProjectUrl>https://github.com/kissorjeyabalan/dalamud-chatcoordinates</PackageProjectUrl>
-    </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>full</DebugType>
-        <Optimize>false</Optimize>
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
-    </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <DebugType>pdbonly</DebugType>
-        <Optimize>true</Optimize>
-        <DefineConstants>TRACE</DefineConstants>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <DalamudLibPath>$(AppData)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
     </PropertyGroup>
     
     <ItemGroup>
         <PackageReference Include="DalamudPackager" Version="11.0.0" />
-        <Reference Include="FFXIVClientStructs">
-            <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Newtonsoft.Json">
-            <HintPath>$(DalamudLibPath)Newtonsoft.Json.dll</HintPath>
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Dalamud">
-            <HintPath>$(DalamudLibPath)Dalamud.dll</HintPath>
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="ImGui.NET">
-            <HintPath>$(DalamudLibPath)ImGui.NET.dll</HintPath>
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="ImGuiScene">
-            <HintPath>$(DalamudLibPath)ImGuiScene.dll</HintPath>
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Lumina">
-            <HintPath>$(DalamudLibPath)Lumina.dll</HintPath>
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Lumina.Excel">
-            <HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
-            <Private>false</Private>
-        </Reference>
     </ItemGroup>
 </Project>

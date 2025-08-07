@@ -1,8 +1,8 @@
-<Project Sdk="Dalamud.NET.Sdk/12.0.2">
+<Project Sdk="Dalamud.NET.Sdk/13.0.0">
     <PropertyGroup>
         <RootNamespace>ChatCoordinates</RootNamespace>
         <AssemblyName>ChatCoordinates</AssemblyName>
-        <Version>2.1.2.7</Version>
+        <Version>2.1.2.8</Version>
         <Authors>kij</Authors>
         <Product>ChatCoordinates</Product>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -11,6 +11,6 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="DalamudPackager" Version="11.0.0" />
+        <PackageReference Include="DalamudPackager" Version="13.0.0" />
     </ItemGroup>
 </Project>
